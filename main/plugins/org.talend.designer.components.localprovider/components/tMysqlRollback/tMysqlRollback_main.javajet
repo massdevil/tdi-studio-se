@@ -1,9 +1,9 @@
-<%@ jet 
+<%@ jet
 imports="
-    org.talend.core.model.process.INode 
-    org.talend.core.model.process.ElementParameterParser 
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
     org.talend.designer.codegen.config.CodeGeneratorArgument
-" 
+"
 %>
 <%@ include file="../templates/Log4j/Log4jDBConnUtil.javajet"%>
 <%
@@ -17,23 +17,27 @@ imports="
     boolean close = ("true").equals(ElementParameterParser.getValue(node,"__CLOSE__"));
 
     String conn = "conn_" + connection;
+    if(connection.matches("^.*?tAmazonAuroraConnection_\\d+$")){
+    	  conn += "_in";
+    }
 %>
 	java.sql.Connection conn_<%=cid%> = (java.sql.Connection)globalMap.get("<%=conn%>");
 
-<%	
-	INode connectionNode = null; 
-	for (INode processNode : node.getProcess().getGeneratingNodes()) { 
-		if(connection.equals(processNode.getUniqueName())) { 
-			connectionNode = processNode; 
-			break; 
-		} 
-	} 
+<%
+	INode connectionNode = null;
+	for (INode processNode : node.getProcess().getGeneratingNodes()) {
+		String nodeUniqueName = processNode.getUniqueName();
+		if(connection.equals(nodeUniqueName) || (connection+"_in").equals(nodeUniqueName)) {
+			connectionNode = processNode;
+			break;
+		}
+	}
 	boolean specify_alias = "true".equals(ElementParameterParser.getValue(connectionNode, "__SPECIFY_DATASOURCE_ALIAS__"));
 	if(specify_alias){
-		String alias = ElementParameterParser.getValue(connectionNode, "__DATASOURCE_ALIAS__"); 
-%> 
+		String alias = ElementParameterParser.getValue(connectionNode, "__DATASOURCE_ALIAS__");
+%>
 		if (null == conn_<%=cid%>) {
-			java.util.Map<String, routines.system.TalendDataSource> dataSources_<%=cid%> = (java.util.Map<String, routines.system.TalendDataSource>) globalMap.get(KEY_DB_DATASOURCES); 
+			java.util.Map<String, routines.system.TalendDataSource> dataSources_<%=cid%> = (java.util.Map<String, routines.system.TalendDataSource>) globalMap.get(KEY_DB_DATASOURCES);
 			if(dataSources_<%=cid%>!=null) {
 				if(dataSources_<%=cid%>.get(<%=(null != alias && !("".equals(alias)))?alias:"\"\""%>)!=null) {
 					conn_<%=cid%> = dataSources_<%=cid%>.get(<%=(null != alias && !("".equals(alias)))?alias:"\"\""%>).getConnection();
@@ -43,7 +47,7 @@ imports="
 <%
 	}
 %>
-	
+
 if(conn_<%=cid%> != null && !conn_<%=cid%>.isClosed()) {
 	<%
 	if(close){
@@ -63,4 +67,3 @@ if(conn_<%=cid%> != null && !conn_<%=cid%>.isClosed()) {
 	}
 	%>
 }
-
