@@ -28,7 +28,7 @@
 		return "";
 	}
 	
-	String encoding = "\"UTF8\"";
+	String encoding = ElementParameterParser.getValue(node, "__ENCODING__");
 	
 	List< ? extends IConnection> conns = node.getIncomingConnections();
 	if(conns==null || conns.isEmpty()){

@@ -100,6 +100,20 @@
 			GROUP="DATA_FILE_CONFIG" NUM_ROW="20">
 			<DEFAULT>true</DEFAULT>
 		</PARAMETER>
+		
+	    <PARAMETER
+		    NAME="ENCODING"
+	 	    FIELD="CLOSED_LIST"
+	 	    NUM_ROW="25" 
+	 	    REQUIRED="true"
+	 	    GROUP="DATA_FILE_CONFIG">
+		   	<ITEMS DEFAULT="&quot;UTF8&quot;">
+		 		<ITEM NAME="UTF8" VALUE="&quot;UTF8&quot;"/>
+		 		<ITEM NAME="UTF16" VALUE="&quot;UTF16&quot;"/>
+		 		<ITEM NAME="UTF16LE" VALUE="&quot;UTF16LE&quot;"/>
+		 		<ITEM NAME="UTF16BE" VALUE="&quot;UTF16BE&quot;"/>
+		 	</ITEMS>
+	    </PARAMETER>
 
 		<PARAMETER NAME="CONFIG_CLIENT" FIELD="CHECK" NUM_ROW="40"
 			GROUP="S3_CONFIG" NB_LINES="5">

@@ -182,7 +182,7 @@ skeleton="../templates/db_output_bulk.skeleton"
 	}
 	
 <%
-	String encoding = "\"UTF8\"";
+	String encoding = ElementParameterParser.getValue(node, "__ENCODING__");
 %>
 	command_<%=cid%>.append("ENCODING ").append(<%=encoding%>).append(" ")
 <%
